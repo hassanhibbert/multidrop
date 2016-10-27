@@ -6,6 +6,15 @@
     this.multiSelectElement = null;
     this.menuFlag = null;
     this.listeners = {};
+    var defaults = {
+      placeholder: 'select options',
+      csvDisplayCount: 2,
+      csvDelimiter: ', ',
+      selectBoxWidth: 160,
+      menuWidth: 200
+    };
+
+    this.options = extend(defaults, options);
 
     buildDropDownMenu.call(this);
     setPreselectedOptions.call(this, this.selectElement);
@@ -75,13 +84,16 @@
             return item.content;
           });
 
-      if (selectedOptions.length > 0 && selectedOptions.length <= 2) {
-        textArea.innerHTML = selectedOptions.join(', ');
-        removeClass(textArea, 'grey-text');
-      } else if (selectedOptions.length === 0) {
-        textArea.innerHTML = 'select options';
+      if (selectedOptions.length === 0) {
+        textArea.innerHTML = this.options.placeholder;
         addClass(textArea, 'grey-text');
-      } else {
+      } else if (this.options.csvDisplayCount === 0) {
+        textArea.innerHTML = selectedOptions.join(this.options.csvDelimiter);
+        removeClass(textArea, 'grey-text');
+      } else if (selectedOptions.length <= this.options.csvDisplayCount) {
+        textArea.innerHTML = selectedOptions.join(this.options.csvDelimiter);
+        removeClass(textArea, 'grey-text');
+      } else  if (selectedOptions.length >= this.options.csvDisplayCount) {
         textArea.innerHTML = selectedOptions.length + ' selected';
       }
     }
@@ -145,12 +157,14 @@
     multiSelectContainer = document.createElement('div');
     multiSelectContainer.className = 'multiSelect multiSelect-' + this.selectElement.name;
     multiSelectContainer.setAttribute('tabindex', 0);
+    multiSelectContainer.style.width = this.options.selectBoxWidth + 'px';
 
     this.multiSelectElement = multiSelectContainer;
 
     // create menu container
     selectMenu = document.createElement('div');
     selectMenu.className = 'selectMenu';
+    selectMenu.style.width = this.options.selectBoxWidth + 'px';
 
     // create wrapper for text
     textBox = document.createElement('span');
@@ -167,6 +181,7 @@
     // create UL
     optionsUL = document.createElement('ul');
     optionsUL.className = 'menulist-' + this.selectElement.name;
+    optionsUL.style.width = this.options.menuWidth + 'px';
 
     for (var i = 0, length = this.selectElement.length; i < length; i++) {
 
@@ -232,6 +247,16 @@
       var rxp = new RegExp('(\\s|^)' + className + '(\\s|$)');
       element.className = element.className.replace(rxp, ' ').trim();
     }
+  }
+
+  function extend(source, properties) {
+    var property;
+    for (property in properties) {
+      if (properties.hasOwnProperty(property)) {
+        source[property] = properties[property];
+      }
+    }
+    return source;
   }
 
   global.MultiDrop = MultiDrop;
