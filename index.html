@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MultiDrop</title>
+    <link rel="stylesheet" href="multidrop.css">
+</head>
+<body>
+<button id="mybtn">Get Value</button>
+<br/>
+<br/>
+
+<select multiple="multiple" name="cars" id="cars">
+    <option value="ford">Ford</option>
+    <option value="toyota" selected>Toyota</option>
+    <option value="honda">Honda</option>
+    <option value="fiat">Fiat</option>
+</select>
+<br>
+<select multiple="multiple" name="bicycles" id="bicycles">
+    <option value="huffy">Huffy</option>
+    <option value="mongoose" selected>Mongoose</option>
+    <option value="dyno">Dyno</option>
+</select>
+
+<p>hello</p>
+<script src="multidrop.js"></script>
+<script>
+    var button = document.querySelector('#mybtn');
+    var carsMultiSelect = new MultiDrop('#cars');
+    var cycleMultiSelect = new MultiDrop('#bicycles');
+
+    button.addEventListener('click', function (event) {
+        console.log('cars: ', carsMultiSelect.getSelected());
+        console.log('cycle: ', cycleMultiSelect.getSelected());
+    });
+</script>
+</body>
+</html>
