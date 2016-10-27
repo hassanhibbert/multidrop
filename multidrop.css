@@ -4,6 +4,7 @@
     font-size: 13px;
     position: relative;
     width: 160px;
+    display: inline-block;
 }
 
 .multiSelect .menulist {
@@ -43,6 +44,7 @@
     margin: 0;
     padding: 10px 0 5px 10px;
     cursor: pointer;
+    float: none;
 }
 
 .multiSelect ul li:nth-last-child(1) {
@@ -67,28 +69,30 @@
     margin: 0 10px 0 0;
     background: #fff;
 }
-.selectMenu .text {
+.multiSelect .selectMenu .text {
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
     display: inline-block;
     float: left;
+    padding-bottom: 1px;
+    white-space: nowrap;
 }
 
-.selectMenu {
+.multiSelect .selectMenu {
     padding: 5px 30px 5px 10px;
     background: #fff;
     border: 1px solid #ccc;
     cursor: pointer;
     box-sizing: border-box;
 }
-.selectMenu:hover {
+.multiSelect .selectMenu:hover {
     border: 1px solid #a2a2a2;
 }
 
-.selectMenu i.text {  }
+.multiSelect .selectMenu i.text {  }
 
-.selectMenu i.arrow {
+.multiSelect .selectMenu i.arrow {
     position: absolute;
     display: inline-block;
     right: 8px;
@@ -99,11 +103,11 @@
     background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wMdBhAJ/fwnjwAAAGFJREFUKM9jYBh+gBFKuzEwMKQwMDB8xaOWlYGB4T4DA0MrsuapDAwM//HgNwwMDDbYTJuGQ8MHBgYGJ1xOYGNgYJiBpuEpAwODHSF/siDZ+ISBgcGClEDqZ2Bg8B6CkQsAPRga0cpRtDEAAAAASUVORK5CYII=') no-repeat center center;
 }
 
-.grey-text {
+.multiSelect .grey-text {
     color: #b3b3b3;
 }
 
-.clearfix:after {
+.multiSelect .clearfix:after {
     content: " "; /* Older browser do not support empty content */
     visibility: hidden;
     display: block;
