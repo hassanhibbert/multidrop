@@ -1,9 +1,19 @@
 .multiSelect {
     outline: none;
+    font-family: 'Arial';
+    font-size: 13px;
+    position: relative;
+    width: 160px;
 }
+
+.multiSelect .menulist {
+    width: 200px;
+}
+
 .multiSelect:focus {
-    outline: 1px solid #3f98f5;
-    box-shadow: 0 0 6px #3f98f5;
+    outline: none;
+    box-shadow: 0 0 4px #3f98f5;
+
 }
 
 .multiSelect.open ul {
@@ -62,18 +72,14 @@
     text-overflow: ellipsis;
     overflow: hidden;
     display: inline-block;
+    float: left;
 }
 
 .selectMenu {
-    padding: 5px 30px 2px 10px;
+    padding: 5px 30px 5px 10px;
     background: #fff;
-    display: inline-block;
-    position: relative;
     border: 1px solid #ccc;
     cursor: pointer;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: visible;
     box-sizing: border-box;
 }
 .selectMenu:hover {
@@ -85,12 +91,22 @@
 .selectMenu i.arrow {
     position: absolute;
     display: inline-block;
-    right: 5px;
+    right: 8px;
     width: 16px;
     height: 16px;
+    top: 50%;
+    margin-top: -5.5%;
     background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wMdBhAJ/fwnjwAAAGFJREFUKM9jYBh+gBFKuzEwMKQwMDB8xaOWlYGB4T4DA0MrsuapDAwM//HgNwwMDDbYTJuGQ8MHBgYGJ1xOYGNgYJiBpuEpAwODHSF/siDZ+ISBgcGClEDqZ2Bg8B6CkQsAPRga0cpRtDEAAAAASUVORK5CYII=') no-repeat center center;
 }
 
 .grey-text {
     color: #b3b3b3;
+}
+
+.clearfix:after {
+    content: " "; /* Older browser do not support empty content */
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
 }

@@ -1,8 +1,12 @@
 (function (global) {
 
-  function MultiDrop(selector, options) {
-    this.selectElement = document.querySelector(selector);
-    this.selectElement.style.display = 'none';
+  var currentPosition = 0, instanceQueue = {};
+
+  function MultiDrop(elementList, options) {
+
+    elementList = getElementList(elementList);
+
+    this.selectElement = elementList[currentPosition];
     this.multiSelectElement = null;
     this.menuFlag = null;
     this.listeners = {};
@@ -10,8 +14,7 @@
       placeholder: 'select options',
       csvDisplayCount: 2,
       csvDelimiter: ', ',
-      selectBoxWidth: 160,
-      menuWidth: 200
+      onChangeHandler: null
     };
 
     this.options = extend(defaults, options);
@@ -19,19 +22,58 @@
     buildDropDownMenu.call(this);
     setPreselectedOptions.call(this, this.selectElement);
     initializeEvents.call(this);
+    this.selectElement.style.display = 'none';
+
+    currentPosition++;
+
+    if (elementList[currentPosition]) {
+      var elementName = elementList[currentPosition].name;
+      instanceQueue[elementName] = new MultiDrop(elementList, this.options);
+    } else {
+      currentPosition = 0;
+    }
+
   }
 
   MultiDrop.prototype = {
-    getSelected: function getSelected() {
-      return getSelectedOptions(this.selectElement).map(function (item) {
+    getSelected: function getSelected(selectElement) {
+
+      selectElement = (instanceQueue[selectElement])
+        ? instanceQueue[selectElement].selectElement
+        : this.selectElement;
+
+      return getSelectedOptions(selectElement).map(function (item) {
         return item.selectValue;
       });
     },
     destroyEvents: function destroyEvents() {
-      var selectBox = this.multiSelectElement.querySelector('.selectMenu');
+
+      var selectBox = this.multiSelectElement.querySelector('.selectMenu'),
+          queueKeys = Object.keys(instanceQueue),
+          currentSelectBox,
+          selectElementClassName,
+          instanceObj;
+
       selectBox.removeEventListener('click', this.listeners.selectBoxClickHandler, false);
+
+      for (var i = 0, length = queueKeys.length; i < length; i++) {
+
+        instanceObj = instanceQueue[queueKeys[i]];
+        selectElementClassName = instanceObj.selectElement.className;
+        currentSelectBox = instanceObj.multiSelectElement.querySelector('.selectMenu');
+
+        if (this.selectElement.className === selectElementClassName) {
+          currentSelectBox.removeEventListener('click', instanceObj.listeners.selectBoxClickHandler, false);
+        }
+
+      }
+
+
     }
   };
+
+
+  global.MultiDrop = MultiDrop;
 
   function initializeEvents() {
     var dropdownMenu = this.multiSelectElement.querySelector('ul'),
@@ -122,6 +164,9 @@
     for (var i = 0, length = element.length; i < length; i++) {
       element[i].selected = selectedValuesHtml.indexOf(element[i].innerHTML) >= 0;
     }
+    if (isFunction(this.options.onChangeHandler)) {
+      this.options.onChangeHandler(this.getSelected());
+    }
   }
 
   function getSelectedFromHtml() {
@@ -157,14 +202,12 @@
     multiSelectContainer = document.createElement('div');
     multiSelectContainer.className = 'multiSelect multiSelect-' + this.selectElement.name;
     multiSelectContainer.setAttribute('tabindex', 0);
-    multiSelectContainer.style.width = this.options.selectBoxWidth + 'px';
 
     this.multiSelectElement = multiSelectContainer;
 
     // create menu container
     selectMenu = document.createElement('div');
-    selectMenu.className = 'selectMenu';
-    selectMenu.style.width = this.options.selectBoxWidth + 'px';
+    selectMenu.className = 'selectMenu clearfix';
 
     // create wrapper for text
     textBox = document.createElement('span');
@@ -180,8 +223,7 @@
 
     // create UL
     optionsUL = document.createElement('ul');
-    optionsUL.className = 'menulist-' + this.selectElement.name;
-    optionsUL.style.width = this.options.menuWidth + 'px';
+    optionsUL.className = 'menulist-' + this.selectElement.name + ' menulist';
 
     for (var i = 0, length = this.selectElement.length; i < length; i++) {
 
@@ -249,6 +291,20 @@
     }
   }
 
+  function isFunction(obj) {
+    return Object.prototype.toString.call(obj) === '[object Function]';
+  }
+
+  function getElementList(elements) {
+    if (typeof elements === 'string') {
+      return Array.prototype.slice.call(document.querySelectorAll(elements));
+    } else if (typeof elements === 'undefined' || elements instanceof Array) {
+      return elements;
+    } else {
+      return [elements];
+    }
+  }
+
   function extend(source, properties) {
     var property;
     for (property in properties) {
@@ -259,6 +315,6 @@
     return source;
   }
 
-  global.MultiDrop = MultiDrop;
+
 
 })(window);
