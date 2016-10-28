@@ -130,9 +130,20 @@
     function dropdownClickHandler(event) {
       var listItem = closestWithTag(event.target, 'li'),
           checkbox = listItem.querySelector('i');
-      hasClass(checkbox, 'selected') ? removeClass(checkbox, 'selected') : addClass(checkbox, 'selected');
+
+      toggleClass(checkbox, 'selected');
       toggleSelectedOptions.call(this, this.selectElement);
       updatePlaceholderText.call(this);
+
+      if (!this.selectElement.hasAttribute('multiple')) {
+        removeClass(multiSelectElement, 'open');
+        toggleClass(checkbox, 'selected');
+        dropdownMenu.removeEventListener('click', this.listeners.dropdownClickHandler, false);
+      }
+    }
+
+    function toggleClass(element, className) {
+      hasClass(element, className) ? removeClass(element, className) : addClass(element, className);
     }
 
     function updatePlaceholderText() {
@@ -251,7 +262,7 @@
       // insert content into LI tags
       optionsLI = document.createElement('li');
       checkbox = document.createElement('i');
-      checkbox.className = 'checkbox';
+      checkbox.className = this.selectElement.hasAttribute('multiple') ? 'checkbox' : 'checkbox hide-checkbox';
       textWrapper = document.createElement('span');
       textWrapper.innerHTML = this.selectElement[i].innerHTML;
 
