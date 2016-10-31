@@ -37,7 +37,7 @@
     initializeEvents.call(this);
     this.selectElement.style.display = 'none';
 
-    // Increment the `currentPosition` to see the next dom element in `elementList` array
+    // Increment the `currentPosition` to check the next dom element in `elementList` array
     currentPosition++;
 
     if (elementList[currentPosition]) {
@@ -70,8 +70,7 @@
       var selectBox = this.multiSelectElement.querySelector('.selectMenu'),
           queueKeys = Object.keys(instanceQueue),
           currentSelectBox,
-          selectElementClassName,
-          instanceObj;
+          _this;
 
       selectBox.removeEventListener('click', this.listeners.selectBoxClickHandler, false);
       this.multiSelectElement.removeEventListener('blur', this.listeners.multiBlurHandler, false);
@@ -80,13 +79,12 @@
       if (queueKeys.length > 0) {
         for (var i = 0, length = queueKeys.length; i < length; i++) {
 
-          instanceObj = instanceQueue[queueKeys[i]];
-          selectElementClassName = instanceObj.selectElement.className;
-          currentSelectBox = instanceObj.multiSelectElement.querySelector('.selectMenu');
+          _this = instanceQueue[queueKeys[i]];
+          currentSelectBox = _this.multiSelectElement.querySelector('.selectMenu');
 
-          if (this.selectElement.className === selectElementClassName) {
-            currentSelectBox.removeEventListener('click', instanceObj.listeners.selectBoxClickHandler, false);
-            instanceObj.multiSelectElement.removeEventListener('blur', instanceObj.listeners.multiBlurHandler, false);
+          if (this.selectElement.className === _this.selectElement.className) {
+            currentSelectBox.removeEventListener('click', _this.listeners.selectBoxClickHandler, false);
+            _this.multiSelectElement.removeEventListener('blur', _this.listeners.multiBlurHandler, false);
           }
         }
       }

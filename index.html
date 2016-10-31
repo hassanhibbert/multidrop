@@ -7,6 +7,7 @@
 </head>
 <body>
 <button id="mybtn">Get Value</button>
+<button id="removeButton">Remove Events</button>
 <br/>
 <br/>
 
@@ -46,6 +47,7 @@
 <script src="multidrop.js"></script>
 <script>
     var button = document.querySelector('#mybtn');
+    var buttonRemoveEvent = document.querySelector('#removeButton');
 
     // Targeting a single element
     var browserMenu = new MultiDrop('#browsers');
@@ -63,13 +65,15 @@
         console.log('browsers: ', browserMenu.getSelected());
         console.log('cars: ', multipleSelectMenues.getSelected());
         console.log('bicycles: ', multipleSelectMenues.getSelected('bicycles'));
-
-        setTimeout(function () {
-            console.log('event cleared');
-            browserMenu.destroyEvents();
-            multipleSelectMenues.destroyEvents();
-        }, 3000);
+        console.log('computers: ', computerSelection.getSelected());
     });
+
+    buttonRemoveEvent.addEventListener('click', function (event) {
+        console.log('event cleared');
+        browserMenu.destroyEvents();
+        multipleSelectMenues.destroyEvents();
+        computerSelection.destroyEvents();
+    }, false);
 
 </script>
 </body>
