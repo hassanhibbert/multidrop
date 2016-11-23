@@ -32,7 +32,7 @@
     this.options = extend(defaults, options);
 
     // Build and initialize widget
-    buildDropDownMenu.call(this);
+    buildDropDownMenu.call(this, true);
     setPreselectedOptions.call(this, this.selectElement);
     initializeEvents.call(this);
     this.selectElement.style.display = 'none';
@@ -65,7 +65,7 @@
       });
     },
 
-    destroyEvents: function destroyEvents() {
+    destroyEvents: function () {
 
       var selectBox = this.multiSelectElement.querySelector('.selectMenu'),
           queueKeys = Object.keys(instanceQueue),
@@ -88,6 +88,13 @@
           }
         }
       }
+    },
+    rebuild: function rebuild() {
+      var rebuiltSelectMenu = buildDropDownMenu.call(this, false),
+          currentMenu = getElementList('.multiSelect-' + this.selectElement.name)[0];
+      currentMenu.parentNode.replaceChild(rebuiltSelectMenu, currentMenu);
+      setPreselectedOptions.call(this, this.selectElement);
+      initializeEvents.call(this);
     }
   };
 
@@ -224,7 +231,7 @@
     return selectedOptions;
   }
 
-  function buildDropDownMenu() {
+  function buildDropDownMenu(appendToDom) {
     var multiSelectContainer, selectMenu, textBox,
         caret, optionsUL, optionsLI, checkbox, textWrapper;
 
@@ -274,9 +281,19 @@
     multiSelectContainer.appendChild(selectMenu);
     multiSelectContainer.appendChild(optionsUL);
 
-    // append multi select container to DOM
-    this.selectElement.parentElement.insertBefore(multiSelectContainer, this.selectElement);
-    multiSelectContainer.appendChild(this.selectElement);
+
+    if (appendToDom) {
+
+      // append multi select container to DOM
+      this.selectElement.parentElement.insertBefore(multiSelectContainer, this.selectElement);
+      multiSelectContainer.appendChild(this.selectElement);
+
+    } else {
+      multiSelectContainer.appendChild(this.selectElement);
+      return multiSelectContainer;
+    }
+
+
   }
 
   function hasClass(element, className) {
