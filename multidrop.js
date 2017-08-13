@@ -12,9 +12,9 @@
    * using es2015 as well
    */
 
-  var Extend = function (source, object) {
-    return Object.assign(Object.create(source), object);
-  };
+  // var Extend = function (source, object) {
+  //   return Object.assign(Object.create(source), object);
+  // };
 
   // Private variables
   var currentPosition = 0, instanceQueue = {};
