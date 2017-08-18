@@ -64,6 +64,7 @@
     };
 
     context.options = ObjectAssign(defaults, options);
+    context.elements = context.getElementList(elements);
 
     return context;
   }
